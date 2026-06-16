@@ -6,6 +6,38 @@ find_program(FXC_COMPILER NAMES fxc
         "C:/Program Files (x86)/Windows Kits/8.1/bin/x64"
 )
 
+if(CMAKE_HOST_UNIX AND CMAKE_CROSSCOMPILING AND PLATFORM_NAME STREQUAL "Windows64")
+    # if(NOT FXC_COMPILER)
+    #     if(EXISTS "${CMAKE_SOURCE_DIR}/Minecraft.Client/Windows64/4JLibs/impls/Windows_Libs/Render/shaders/fxc.exe")
+            set(_FXC_COMPILER "${CMAKE_SOURCE_DIR}/Minecraft.Client/Windows64/4JLibs/impls/Windows_Libs/Render/shaders/fxc.exe")
+        # endif()
+    # endif()
+
+    find_program(WINE NAMES wine)
+    if(NOT WINE)
+        message(FATAL_ERROR "Could not find 'wine', please make sure you have wine installed.")
+    endif()
+
+    message(STATUS "Translating FXC through Wine")
+
+    set(FXC_COMPILER_WRAPPER "${CMAKE_SOURCE_DIR}/Minecraft.Client/Windows64/4JLibs/impls/Windows_Libs/Render/shaders/fxcwinewrapper.sh.in")
+    set(_FXC_COMPILER_WRAPPER "${CMAKE_SOURCE_DIR}/Minecraft.Client/Windows64/4JLibs/impls/Windows_Libs/Render/shaders/fxcwinewrapper.sh")
+
+    configure_file(
+        "${FXC_COMPILER_WRAPPER}"
+        "${_FXC_COMPILER_WRAPPER}"
+        @ONLY
+    )
+	file(CHMOD "${_FXC_COMPILER_WRAPPER}"
+	    PERMISSIONS
+	    OWNER_READ OWNER_WRITE OWNER_EXECUTE
+	    GROUP_READ GROUP_EXECUTE
+	    WORLD_READ WORLD_EXECUTE
+	)
+
+    set(FXC_COMPILER "${_FXC_COMPILER_WRAPPER}" CACHE FILEPATH "Path to FXC compiler" FORCE)
+endif()
+
 if(NOT FXC_COMPILER)
     message(FATAL_ERROR "Could not find 'fxc.exe', please make sure you have the Windows SDK installed or this file is available in this directory.")
 endif()

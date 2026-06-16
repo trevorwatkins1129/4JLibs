@@ -443,3 +443,6 @@ PS_TextureProjection.h
 PS_ForceLOD.h
 PS_ScreenSpace.h
 PS_ScreenClear.h
+
+# wine wrapper
+fxcwinewrapper.sh
