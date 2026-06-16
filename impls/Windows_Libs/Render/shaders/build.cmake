@@ -7,11 +7,7 @@ find_program(FXC_COMPILER NAMES fxc
 )
 
 if(CMAKE_HOST_UNIX AND CMAKE_CROSSCOMPILING AND PLATFORM_NAME STREQUAL "Windows64")
-    # if(NOT FXC_COMPILER)
-    #     if(EXISTS "${CMAKE_SOURCE_DIR}/Minecraft.Client/Windows64/4JLibs/impls/Windows_Libs/Render/shaders/fxc.exe")
-            set(_FXC_COMPILER "${CMAKE_SOURCE_DIR}/Minecraft.Client/Windows64/4JLibs/impls/Windows_Libs/Render/shaders/fxc.exe")
-        # endif()
-    # endif()
+    set(_FXC_COMPILER "${CMAKE_SOURCE_DIR}/Minecraft.Client/Windows64/4JLibs/impls/Windows_Libs/Render/shaders/fxc.exe")
 
     find_program(WINE NAMES wine)
     if(NOT WINE)
